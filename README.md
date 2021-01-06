@@ -1,5 +1,5 @@
 # SequaPath
-Shiny app for counting MinION reads
+Shiny app for counting MinION reads (deployed at https://msierk.shinyapps.io/sequapath)
 
 Requires an sqlite file nameNode.sqlite created by the taxonomizr R package (356 MB).
 
