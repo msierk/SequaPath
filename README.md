@@ -7,4 +7,4 @@ Requires an sqlite file nameNode.sqlite created by the taxonomizr R package (356
 
 Uses rrnDB-5.6_pantaxa_stats_NCBI.tsv from https://rrndb.umms.med.umich.edu/static/download/
 
-Uses PathogensDB.xlsx for labels of pathogenicity according to CDC, Robert Koch Institute, and Nephros: https://www.cdc.gov/hai/prevent/environment/water.html, https://www.bode-science-center.com/center/relevant-pathogens-from-a-z.html
+Uses PathogensDB.xlsx for labels of pathogenicity according to CDC, Robert Koch Institut, and Nephros: https://www.cdc.gov/hai/prevent/environment/water.html, https://www.bode-science-center.com/center/relevant-pathogens-from-a-z.html
