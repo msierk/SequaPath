@@ -1,0 +1,88 @@
+---
+title: "SequaPath&trade; Bacterial Census"
+subtitle: "Nanopore MinION Reads"
+header-includes:
+- \usepackage{wallpaper}
+- \usepackage{fancyhdr}
+- \fancypagestyle{plain}{\pagestyle{fancy}}
+- \pagestyle{fancy}
+- \fancyhead{}
+- \fancyfoot[L]{Nephros, Inc. www.nephros.com}
+- \fancyfoot[R]{\today}
+fig_caption: yes
+#includes:  
+#  in_header: my_header.tex
+output: 
+  pdf_document:
+    #template: template.tex # to enable use of xelatex on shinyapps.io
+    fig_width: 10
+    fig_height: 7
+    #latex_engine: xelatex # use system fonts
+params:
+  pl: NA
+  inpName: NA
+  barcode: NA
+  barcodeLabel: NA
+  barcodeReads: NA
+  table_counts: NA
+    
+---
+<!-- Place logo in upper left corner -->
+\addtolength{\wpXoffset}{-6cm}
+\addtolength{\wpYoffset}{13cm}
+\CenterWallPaper{0.20}{nephros_logo.png}
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Experiment Information  
+```{r text1, echo=FALSE, results='asis'}
+cat("Input file: ", params$inpName, " \n")  
+cat("Barcode: ", params$barcode, " \n")  
+cat("Experiment Information: ", params$barcodeLabel, " \n\n\n")  
+```
+\
+
+```{r plot, echo=FALSE}
+print(params$pl)
+```
+
+**Pathogen Designations**  
+CDC Opportunistic Pathogens of Premise Plumbing^[<https://www.cdc.gov/hai/prevent/environment/water.html>]  
+Bode Science Center list of clinically relevant pathogens (RKI/WHO)^[<https://www.bode-science-center.com/center/relevant-pathogens-from-a-z.html>]  
+Nephros known pathogens
+
+\newpage
+
+```{r text2, echo = FALSE, results = 'asis'} 
+cat("Barcode: ", params$barcode, " \n")  
+cat("Barcode reads: ", params$barcodeReads, " \n")  
+cat("Copy number from https://rrndb.umms.med.umich.edu/static/download/rrnDB-5.6_pantaxa_stats_NCBI.tsv.zip")
+```
+\
+```{r table, echo = FALSE, ft.align = "bottom"}
+# print out the output table, nicely formatted
+library(knitr)
+library(flextable)
+set_flextable_defaults(fonts_ignore=TRUE)
+df <- as.data.frame(params$table_counts)
+df <- df %>% mutate_if(is.numeric, format, digits=1)
+df <- flextable(df)
+df <- theme_box(df)
+df <- set_table_properties(df, layout = "fixed")
+df <- fit_to_width(df, max_width = 5)
+df <- fontsize(df, size = 10, part = "all")
+df <- align(df, j=c(4,6), align = "right")
+df <- align(df, j=1, align = "left")
+df <- align(df, j=c(2,3,5,7), align = "center")
+df <- width(df, j=1, width=1.2)
+df <- width(df, j=2, width=0.6)
+df <- width(df, j=3, width=0.5)
+df <- width(df, j=5, width=0.9)
+df <- width(df, j=6, width=0.5)
+
+#df <- autofit(df)
+df
+```
+

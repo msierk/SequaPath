@@ -4,36 +4,45 @@
 # 3. pathogen info
 
 library(taxonomizr) # converts taxid to genus & species
-library(readxl)
-library(writexl)
+library(readxl) # to read in PathodgensDB.xlsx
+library(writexl) # to write out new PathogensDB.xlsx
 
 makeTaxonomyDB <- function()  {
   # Get the taxonomy database
   getNamesAndNodes(outDir = ".",
              url = "ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz",
-             fileNames = c("names.dmp", "nodes.dmp"))
-  read.names.sql('names.dmp')
-  read.nodes.sql('nodes.dmp')
-  # produces nameNote.sqlite
+             fileNames = c("db/names.dmp", "db/nodes.dmp"))
+  read.names.sql('db/names.dmp')
+  read.nodes.sql('db/nodes.dmp')
+  # produces nameNode.sqlite
 }
 
 get16Sdb <- function () {
   # get the 16S rRNA copy number here
   # file: rrnDB-5.6_pantaxa_stats_NCBI.tsv
-  rrndb <- read.csv("rrnDB-5.6_pantaxa_stats_NCBI.tsv", sep="\t")
+  # from https://rrndb.umms.med.umich.edu/static/download/?C=N;O=D
+  temp <- tempfile()
+  download.file("https://rrndb.umms.med.umich.edu/static/download/rrnDB-5.6_pantaxa_stats_NCBI.tsv.zip",temp)
+  rrndb <- read.csv(unz(temp, "rrnDB-5.6_pantaxa_stats_NCBI.tsv"), sep="\t")
+  unlink(temp)
   return(rrndb)
 }
 
-getPathogenDB <- function() {
+getPathogenDB <- function(redo_table) {
+  #print(paste0("redo_table: ", redo_table))
   # get pathogen data here
-  # pathogensDB.xlsx
+  # default file is pathogensDB.xlsx
   # uses getId from taxonomizr
-  redo_table = FALSE # change to TRUE if need to regenerate the genus taxids
-  pathDB <- read_xlsx("PathogensDB.xlsx")
+  #redo_table = TRUE if need to regenerate the genus taxids
+  pathDB = data.frame()
   if (redo_table) {
-    genus_taxid <- getId(pathDB$Genus)
+    print("Redoing the pathogens DB...")
+    pathDB <- read_xlsx("db/SequaPathPathogenList20200923.xlsx")
+    genusTaxid <- getId(pathDB$Genus)
     pathDB <- cbind(genusTaxid, pathDB)
-    write_xlsx(pathDB, "PathogensDB.xlsx")
+    write_xlsx(pathDB, "db/PathogensDB.xlsx")
+  } else {
+    pathDB <- read_xlsx("db/PathogensDB.xlsx")
   }
   return(pathDB)
 }
