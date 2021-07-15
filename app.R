@@ -19,7 +19,6 @@
 # filename	read_id	exit_status	runid	taxid	barcode	accuracy	lca	genus_taxid
 # Allow user to select file from filesystem
 library(shiny)
-library(shinythemes) # for adjust the theme (not used)
 library(dplyr)
 library(ggplot2)
 library(taxonomizr) # converts taxid to genus & species
@@ -72,7 +71,7 @@ ui <- fluidPage(
     fluidRow(
         column(4,
             # Input: Select a file ----
-            fileInput("file1", "Choose CSV File",
+            fileInput("file1", "Choose CSV File (200 MB limit)",
                   multiple = FALSE,
                   accept = c("text/csv",
                              "text/comma-separated-values,text/plain",
@@ -143,7 +142,7 @@ ui <- fluidPage(
 # Define server logic required to plot the histogram and show tables
 server <- function(input, output, session) {
     # Allow larger files to be uploaded
-    options(shiny.maxRequestSize=50*1024^2) 
+    options(shiny.maxRequestSize=200*1024^2) 
     
     inputTable <- reactive ({
         req(input$file1)
@@ -296,7 +295,7 @@ server <- function(input, output, session) {
                    shape = guide_legend(override.aes = list(size = 0.5))) +
             #Specify colours
             scale_fill_manual(values=group.colors, labels=group.labels) +
-            scale_color_manual(values=c(B="black"), guide=FALSE) +
+            scale_color_manual(values=c(B="black"), guide = "none") +
             labs(title = input$barcode, subtitle = input$barcodeLabel, caption = "Outline = Biofilm producer")
             #annotate("text", Inf, Inf, label = "Outline = Biofilm producer", hjust = 1, vjust = 1, size = 5)
         

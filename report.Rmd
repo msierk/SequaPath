@@ -2,6 +2,7 @@
 title: "SequaPath&trade; Bacterial Census"
 subtitle: "Nanopore MinION Reads"
 header-includes:
+# install tinytex package
 - \usepackage{wallpaper}
 - \usepackage{fancyhdr}
 - \fancypagestyle{plain}{\pagestyle{fancy}}

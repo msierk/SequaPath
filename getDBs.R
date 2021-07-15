@@ -17,6 +17,11 @@ makeTaxonomyDB <- function()  {
   # produces nameNode.sqlite
 }
 
+makeAcc2taxidDB <- function() {
+  setwd("/Users/msierk/Dropbox/Consulting/Nephros/MinION/data")
+  read.accession2taxid("nucl_gb.accession2taxid", "accession2taxid.sqlite")
+}
+
 get16Sdb <- function () {
   # get the 16S rRNA copy number here
   # file: rrnDB-5.6_pantaxa_stats_NCBI.tsv
